@@ -1,37 +1,43 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent, reactive, toRefs } from 'vue'
 import { TodoItem } from '../types'
 
 export default defineComponent({
-  data: () => ({
-    newTask: {
-      label: '',
-      type: 'personal'
-    } as TodoItem,
-    taskItems: [] as TodoItem[],
-    listFilter: 'all'
-  }),
-  computed: {
-    filteredTasks(): TodoItem[] {
-      if (this.listFilter === 'complete') {
-        return this.taskItems.filter(
+  setup() {
+    const state = reactive({
+      newTask: {
+        label: '',
+        type: 'personal'
+      } as TodoItem,
+      taskItems: [] as TodoItem[],
+      listFilter: 'all'
+    })
+
+    const filteredTasks = computed(() => {
+      if (state.listFilter === 'complete') {
+        return state.taskItems.filter(
           (item: TodoItem) => item.isComplete === true
         )
-      } else if (this.listFilter === 'incomplete') {
-        return this.taskItems.filter(
+      } else if (state.listFilter === 'incomplete') {
+        return state.taskItems.filter(
           (item: TodoItem) => item.isComplete === false
         )
       } else {
-        return this.taskItems
+        return state.taskItems
       }
-    }
-  },
-  methods: {
-    addTask() {
-      this.taskItems.push({
-        ...this.newTask,
+    })
+
+    const addTask = () => {
+      state.taskItems.push({
+        ...state.newTask,
         isComplete: false
       })
+    }
+
+    return {
+      ...toRefs(state),
+      addTask,
+      filteredTasks
     }
   }
 })
