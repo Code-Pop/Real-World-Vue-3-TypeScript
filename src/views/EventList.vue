@@ -1,12 +1,14 @@
 <template>
+  <div>
   <h1>Events for Good</h1>
   <div class="events">
     <EventCard v-for="event in events" :key="event.id" :event="event" />
   </div>
+</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { DefineComponent } from 'vue'
 import { EventItem } from '../types'
 
 import EventCard from '../components/EventCard.vue'
